@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QR Code Hacking: How It Works, How Attackers Exploit It, and How to Stay Protected</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@500;700;800&family=Fira+Code&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0b0a; --bg2:#101210; --card:#121412; --card2:#161916;
+  --bd:#20261f; --tx:#e9ece8; --mut:#8fa08c;
+  --grn:#39e07a; --grn2:#8cf5ae; --wht:#f4f7f3; --warn:#ff5c5c;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-behavior:smooth; scroll-padding-top:calc(env(safe-area-inset-top,0px) + 14px); color-scheme:dark;}
+*,*:before,*:after{box-sizing:inherit}
+body{
+  margin:0; background:var(--bg); color:var(--tx);
+  font:400 17px/1.85 "Lora", Georgia, serif;
+  background-image:
+    radial-gradient(circle at 85% -5%, rgba(57,224,122,.10), transparent 42%),
+    radial-gradient(circle at 0% 25%, rgba(140,245,174,.05), transparent 38%);
+}
+.w{max-width:740px; margin:auto; padding:0 18px 48px;}
+header{padding:38px 0 18px; text-align:center;}
+.byline-tag{
+  display:inline-flex; align-items:center; gap:7px; font:600 12px/1 "Inter",sans-serif;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--grn);
+  border:1px solid var(--bd); background:var(--card); border-radius:99px; padding:6px 14px;
+}
+.byline-tag:before{content:"●"; color:var(--grn); font-size:8px;}
+h1{
+  font-family:"Inter",sans-serif; font-weight:800; letter-spacing:-.01em;
+  font-size:clamp(1.55rem,6vw,2.3rem); line-height:1.35; margin:18px 0 10px; color:var(--wht);
+}
+.author{font:600 .95rem "Inter",sans-serif; color:var(--grn2);}
+.author span{color:var(--mut); font-weight:500;}
+.sub{color:var(--mut); font-size:.92rem; margin-top:4px;}
+h2{
+  font-family:"Inter",sans-serif; font-weight:800; font-size:1.35rem; color:var(--wht);
+  margin:46px 0 14px; padding-left:14px; border-left:4px solid var(--grn);
+}
+h3{font-family:"Inter",sans-serif; font-weight:700; font-size:1.08rem; margin:28px 0 8px; color:var(--grn2);}
+h3:before{content:"› "; color:var(--grn);}
+h4{font-family:"Inter",sans-serif; font-weight:700; margin:18px 0 6px; color:var(--grn); font-size:.98rem;}
+p{margin:11px 0;}
+code,.c{
+  font-family:"Fira Code",monospace; background:#0d1c12; color:var(--grn2);
+  border:1px solid #1d3a26; border-radius:6px; padding:1px 7px; font-size:.84em;
+}
+ul,ol{padding-left:22px; margin:10px 0;}
+li{margin:5px 0;} li::marker{color:var(--grn);}
+.card{background:var(--card); border:1px solid var(--bd); border-radius:14px; padding:4px 18px; margin:16px 0;}
+.note{background:var(--card2); border-left:4px solid var(--grn); border-radius:10px; padding:12px 16px; margin:16px 0; font-size:.96rem;}
+.warn{border-left-color:var(--warn);}
+.warn:before{content:"⚠ "; color:var(--warn); font-weight:700;}
+.ethics{background:var(--card2); border:1px solid var(--grn); border-radius:12px; padding:14px 18px; margin:16px 0; font-size:.95rem;}
+.ethics b{color:var(--grn2);}
+nav.toc{background:var(--card); border:1px solid var(--bd); border-radius:14px; padding:8px 18px 14px;}
+nav.toc b{display:block; margin:10px 0; font:700 .85rem "Inter",sans-serif; letter-spacing:.06em; text-transform:uppercase; color:var(--grn);}
+nav.toc ol{margin:0; padding-left:20px; font-family:"Inter",sans-serif; font-size:.92rem;}
+nav.toc a{color:var(--tx); text-decoration:none;}
+nav.toc a:hover{color:var(--grn);}
+.tw{overflow-x:auto; margin:16px 0; border:1px solid var(--bd); border-radius:12px;}
+table{border-collapse:collapse; width:100%; min-width:480px; font-family:"Inter",sans-serif; font-size:.9rem;}
+th,td{padding:10px 12px; text-align:left; border-bottom:1px solid var(--bd); line-height:1.6;}
+th{background:#131a13; color:var(--grn);} tr:last-child td{border:0;}
+.sc{border:1px solid var(--bd); border-radius:12px; margin:12px 0; background:var(--card); padding:2px 18px 8px;}
+.sc h4{display:flex; gap:8px; align-items:center;}
+a{color:var(--grn);}
+.codebox{background:#0a140d; border:1px solid #1d3a26; border-radius:10px; padding:14px 16px; margin:12px 0; overflow-x:auto;}
+.codebox pre{margin:0; font-family:"Fira Code",monospace; font-size:.82rem; line-height:1.6; color:#c8f7d6;}
+.foot-cta{margin-top:48px; text-align:center; background:var(--card); border:1px dashed var(--grn); border-radius:16px; padding:22px 16px;}
+footer{text-align:center; color:var(--mut); font-size:.78rem; margin-top:26px; font-family:"Inter",sans-serif;}
+</style>
+</head>
+<body>
+<div class="w">
+<header>
+<span class="byline-tag">Cybersecurity · Learn</span>
+<h1>QR Code Hacking: How It Works, How Attackers Exploit It, and How to Stay Protected</h1>
+<div class="author">Written by Mohammed Basem <span>— Cybersecurity Engineer</span></div>
+<div class="sub">A practical guide to QR-based attacks, defenses, and authorized security testing</div>
+</header>
+
+<nav class="toc">
+<b>Table of Contents</b>
+<ol>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#s1">What Is a QR Code and How Does It Work?</a></li>
+<li><a href="#s2">How Do QR Code Hacking Attacks Work?</a></li>
+<li><a href="#s3">What Information Can an Attacker Obtain?</a></li>
+<li><a href="#s4">How to Protect Yourself from QR Code Attacks</a></li>
+<li><a href="#s5">What to Do If You Scanned a Suspicious QR Code</a></li>
+<li><a href="#s6">The Cybersecurity Perspective</a></li>
+<li><a href="#s7">Ethical Hacking: Testing QR Attack Vectors Legally</a></li>
+<li><a href="#s8">How Organizations Can Defend Against QR Code Attacks</a></li>
+<li><a href="#concl">Conclusion</a></li>
+<li><a href="#refs">References and Further Reading</a></li>
+</ol>
+</nav>
+
+<section id="intro">
+<h2>Introduction</h2>
+<p>Quick Response (QR) codes have become an essential part of everyday life. People use them to access websites, connect to Wi-Fi networks, make payments, download applications, and log in to online services. Although this technology is convenient, it can also be abused by cybercriminals to steal sensitive information, compromise accounts, and deceive unsuspecting users.</p>
+<div class="note">A QR code is not inherently a hacking tool. It is a method of encoding information that can direct a user to a website, display text, or initiate an action supported by a device or application. The actual risk depends on the encoded content, the user's actions, the security of the device, and the presence of software vulnerabilities.</div>
+<p>The term <code>Quishing</code>, derived from "QR code" and "phishing," describes phishing attacks that use QR codes to deceive victims. These attacks combine social engineering with the widespread use of mobile devices and digital services.</p>
+<p>This article explains how QR code attacks work, the techniques attackers use, the potential consequences, how professionals test for these weaknesses under authorization, and the measures individuals and organizations can take to prevent them.</p>
+</section>
+
+<section id="s1">
+<h2>1. What Is a QR Code and How Does It Work?</h2>
+<p>A QR code is a two-dimensional barcode capable of storing information that can be decoded using a smartphone camera or a dedicated QR reader.</p>
+<h4>A QR code may contain:</h4>
+<ul>
+<li>A URL pointing to a website.</li>
+<li>Plain text or contact information.</li>
+<li>Wi-Fi network connection details.</li>
+<li>Payment-related information.</li>
+<li>Data used to open an application or initiate a supported action.</li>
+</ul>
+<p>When a user scans a QR code, the device decodes the information and may display it or offer to perform an action based on its content. For example, a QR code may contain a link to a fake email login page. If the user opens the page and enters their credentials, the attacker may collect the username and password.</p>
+<div class="note">Scanning a QR code does not automatically give an attacker access to a phone, its files, or its accounts. Reading the code, opening its destination, granting permissions, and exploiting a software vulnerability are distinct events. The danger usually lies in what the QR code leads to and what happens after it is scanned.</div>
+</section>
+
+<section id="s2">
+<h2>2. How Do QR Code Hacking Attacks Work?</h2>
+<p>QR code attacks can take several forms. Some rely on deception, others target authentication systems, and some may exploit vulnerabilities in software.</p>
+
+<h3>2.1. Quishing: Phishing Through QR Codes</h3>
+<p>Quishing is one of the most common QR-related security risks. An attacker creates a QR code containing a link to a fraudulent website, distributed through an email, a printed notice, a fake payment sticker, or a message claiming that the user must verify an account.</p>
+<h4>The attack generally follows these steps:</h4>
+<ol>
+<li><b>Creating a malicious QR code:</b> the attacker encodes a URL leading to a website under their control.</li>
+<li><b>Tricking the victim into scanning it:</b> the code may appear to offer a legitimate service, such as a parcel delivery update.</li>
+<li><b>Opening a fraudulent website:</b> the victim is directed to a page imitating a trusted organization.</li>
+<li><b>Collecting sensitive information:</b> if the victim enters credentials or financial information, the attacker may capture those details.</li>
+<li><b>Attempting account compromise:</b> the attacker may use the stolen information to access the victim's accounts.</li>
+</ol>
+<div class="note warn">The QR code itself does not steal the password. The theft occurs because the user is deceived into submitting sensitive information to an untrusted destination.</div>
+
+<h3>2.2. QRLJacking: QR Login Session Hijacking</h3>
+<p><code>QRLJacking</code> (QR Login Jacking) is a more specialized attack involving services that authenticate users through QR codes. Some messaging apps and web services let users link a browser or computer session by scanning a QR code with their mobile app.</p>
+<h4>In a vulnerable workflow, the process may involve:</h4>
+<ol>
+<li>The attacker initiates a login or device-linking session.</li>
+<li>The attacker presents the resulting QR code through a deceptive page or message.</li>
+<li>The victim scans the code with a trusted app, believing the action is legitimate.</li>
+<li>If the authentication system lacks adequate safeguards, the victim's account becomes linked to the attacker's session.</li>
+</ol>
+<div class="note">Only scan login codes you personally initiated, and verify the device/session details shown by the official app before confirming. QRLJacking's success depends entirely on the target service's authentication design.</div>
+
+<h3>2.3. QR Code Replacement and Payment Fraud</h3>
+<p>An attacker may place a sticker over a genuine code in a restaurant, parking facility, or payment location. A customer who scans the replacement code may be redirected to a fraudulent website or payment destination.</p>
+<h4>This can lead to:</h4>
+<ul>
+<li>Payments sent to the wrong recipient.</li>
+<li>Theft of financial information.</li>
+<li>Redirection to fraudulent payment pages.</li>
+<li>Exposure to further phishing attempts.</li>
+</ul>
+<p>Inspect QR stickers for tampering and verify the recipient's name and payment details before authorizing any transaction.</p>
+
+<h3>2.4. Malicious Downloads and Software Vulnerabilities</h3>
+<p>Some QR codes lead to websites that encourage downloading suspicious applications, installing configuration profiles, or granting unnecessary permissions. In other cases, a malicious website may try to exploit a vulnerability in an outdated browser or OS.</p>
+<h4>Three distinct scenarios:</h4>
+<div class="card"><ul>
+<li><b>Phishing:</b> the victim is tricked into voluntarily submitting sensitive information.</li>
+<li><b>Malicious software installation:</b> the victim installs an unsafe app or grants it dangerous permissions.</li>
+<li><b>Software exploitation:</b> an attacker abuses a vulnerability to perform unauthorized actions.</li>
+</ul></div>
+<p>Scanning a QR code does not automatically install malware or compromise a device — but users should avoid downloading apps from unknown links and keep devices updated.</p>
+</section>
+
+<section id="s3">
+<h2>3. What Information Can an Attacker Obtain?</h2>
+<div class="tw"><table>
+<thead><tr><th>Attack type</th><th>Potential consequences</th></tr></thead>
+<tbody>
+<tr><td>Phishing</td><td>Theft of passwords, usernames, or financial information</td></tr>
+<tr><td>Login session hijacking</td><td>Unauthorized access to an account or authenticated session</td></tr>
+<tr><td>Payment fraud</td><td>Financial loss or payment to an unintended recipient</td></tr>
+<tr><td>Malicious applications</td><td>Data theft or monitoring, depending on permissions</td></tr>
+<tr><td>Software exploitation</td><td>Unauthorized actions depending on the vulnerability</td></tr>
+<tr><td>Tracking via a website</td><td>Collection of IP address, browser details, and connection metadata</td></tr>
+</tbody></table></div>
+<div class="note warn">A common misconception is that a QR code can automatically extract a phone's photos, passwords, contacts, and precise location simply by being scanned. This is generally false — access requires an appropriate mechanism: granted permissions, voluntarily submitted information, or an actual software vulnerability.</div>
+</section>
+
+<section id="s4">
+<h2>4. How to Protect Yourself from QR Code Attacks</h2>
+<p>Preventing QR code attacks does not require avoiding every QR code — verify the source and destination, secure your accounts, and maintain your devices.</p>
+
+<h3>4.1. Inspect the Destination Before Opening It</h3>
+<h4>Look for:</h4>
+<ul>
+<li>Misspelled domain names.</li>
+<li>Unexpected subdomains.</li>
+<li>Unfamiliar or shortened links.</li>
+<li>Domains imitating legitimate brands.</li>
+<li>Unnecessary requests for sensitive information.</li>
+</ul>
+<div class="note">HTTPS is not automatically trustworthy. It encrypts the connection, but fraudulent websites can use HTTPS too.</div>
+
+<h3>4.2. Avoid Installing Applications from Unknown Sources</h3>
+<p>If a QR code directs you to download an APK, install an unknown configuration profile, or disable a security feature, stop and verify the request. Search for the app independently through the official app store.</p>
+
+<h3>4.3. Enable Multi-Factor Authentication</h3>
+<p>Multi-factor authentication (<code>MFA</code>) adds a layer of protection. Where available, consider passkeys or hardware security keys, which resist credential phishing better than passwords alone. MFA does not prevent every compromise — attackers may still try to trick users into approving fraudulent login requests.</p>
+
+<h3>4.4. Keep Your OS and Applications Updated</h3>
+<p>Security updates address vulnerabilities attackers may exploit. Keep your OS, browser, and messaging apps current, and avoid unsupported software versions.</p>
+
+<h3>4.5. Verify QR Codes in Public Places</h3>
+<p>Inspect codes for tampering before scanning. For payment QR codes, verify the recipient and transaction details before confirming.</p>
+
+<h3>4.6. Secure Login and Device-Linking Processes</h3>
+<p>Never scan a QR code to connect an account unless you initiated the process. Check the confirmation screen in the official app, and reject anything unrecognized. Review active sessions and linked devices periodically.</p>
+</section>
+
+<section id="s5">
+<h2>5. What to Do If You Scanned a Suspicious QR Code</h2>
+<p>The appropriate response depends on what happened after the scan. Scanning a suspicious code does not necessarily mean your device is compromised.</p>
+
+<div class="sc"><h4>🟢 Scenario 1 — You scanned the code but did not open the link</h4>
+<p>Close the preview, don't proceed to an unfamiliar destination. No further action is generally needed.</p></div>
+
+<div class="sc"><h4>🟡 Scenario 2 — You opened the website but entered no information</h4>
+<p>Close the page and update your browser/OS if needed. If a file downloaded automatically or the device behaves oddly, investigate with a reputable security tool or trusted support.</p></div>
+
+<div class="sc"><h4>🔴 Scenario 3 — You entered your password on a fake website</h4>
+<ol>
+<li>Open the legitimate website independently, not via the suspicious link.</li>
+<li>Change the compromised password.</li>
+<li>Change the password on any other accounts where it was reused.</li>
+<li>Review active sessions and sign out unknown devices.</li>
+<li>Check recovery email/phone and account settings for unauthorized changes.</li>
+<li>Enable MFA if not already enabled.</li>
+</ol>
+<p>If the account belongs to an organization, notify its IT or security team.</p></div>
+
+<div class="sc"><h4>🔴 Scenario 4 — You entered payment information</h4>
+<p>Contact your bank via its official phone number or app. Report any unauthorized transaction promptly and preserve relevant evidence.</p></div>
+
+<div class="sc"><h4>🔴 Scenario 5 — You installed a suspicious application</h4>
+<p>Avoid using the device for sensitive accounts until assessed. Disconnect it from the network if needed, remove the app, review its permissions, and change important passwords from a clean device. A factory reset may be necessary in some cases, but it shouldn't be the automatic first response.</p></div>
+</section>
+
+<section id="s6">
+<h2>6. The Cybersecurity Perspective: How Professionals Study QR Code Attacks</h2>
+<p>Understanding QR code attacks requires more than spotting suspicious images — it involves examining URLs, authentication workflows, mobile security, and application behavior.</p>
+
+<h3>URL Analysis</h3>
+<p>Examining a link's domain, path, parameters, and destination to determine legitimacy — looking for misleading domains, suspicious redirects, and other phishing indicators.</p>
+
+<h3>Phishing Detection</h3>
+<p>Identifying attempts to impersonate trusted organizations or manipulate users into disclosing sensitive information — unusual login requests, inconsistent domains, artificial urgency.</p>
+
+<h3>Session Hijacking</h3>
+<p>Studying how session tokens are created, protected, validated, and invalidated, and how applications prevent unauthorized session linking.</p>
+
+<h3>Authentication Security</h3>
+<p>QR-based login systems should use secure session binding, short-lived tokens, clear confirmation screens, and safeguards against unauthorized device linking.</p>
+
+<h3>Mobile Security</h3>
+<p>Examining app permissions, software update posture, installation sources, and the security boundaries enforced by mobile operating systems.</p>
+
+<h3>Incident Response</h3>
+<p>Identifying, containing, investigating, and recovering from an incident — disabling compromised sessions, resetting credentials, reviewing account activity, checking for malware.</p>
+</section>
+
+<section id="s7">
+<h2>7. Ethical Hacking: Testing QR Attack Vectors Legally</h2>
+<div class="ethics"><b>Scope and authorization first.</b> Everything in this section applies only to systems, accounts, and organizations you own or have explicit written authorization to test (a signed penetration-testing agreement / rules of engagement). Testing QR flows against real people or services without authorization is illegal in most jurisdictions, even when the goal is "just research."</div>
+
+<h3>7.1. How an Authorized QR Security Assessment Is Structured</h3>
+<p>When a cybersecurity team is hired to assess an organization's exposure to QR-based attacks, the engagement follows the same structure as any social-engineering or phishing assessment:</p>
+<ol>
+<li><b>Scoping and authorization:</b> define exactly which systems, locations, or employee groups are in scope, obtain signed authorization, and set clear rules of engagement (what's allowed, what isn't, and an emergency stop condition).</li>
+<li><b>Threat modeling:</b> identify which QR-driven flows exist in the organization — e.g. payment stickers, badge/device-linking logins, marketing posters, Wi-Fi onboarding — and which ones would matter most if abused.</li>
+<li><b>Simulated campaign design:</b> for an authorized phishing/quishing simulation, the test uses an internal tracking domain (never a real brand's look-alike domain) and a landing page that logs only whether a link was opened — never real credentials — then immediately informs the participant it was a simulation and links to training material.</li>
+<li><b>Technical review of QR-based login:</b> for apps that support "scan to log in," the assessor reviews whether sessions are short-lived, whether the confirmation screen clearly shows device/location, and whether the backend rejects a code reused in a different session (replay protection).</li>
+<li><b>Physical review of printed QR codes:</b> checking payment/table codes for signs a sticker could be placed over them, and whether the business verifies codes periodically.</li>
+<li><b>Reporting:</b> documenting findings with severity ratings, business impact, and concrete remediation steps — not raw exploit payloads — delivered to the organization's security team.</li>
+</ol>
+
+<h3>7.2. A Safe, Legal Exercise for Learners</h3>
+<p>You can study how QR codes and scanners behave without targeting any other person, account, or system. This is the actual hands-on part — generating and decoding your own test codes:</p>
+<div class="codebox"><pre>pip install qrcode[pil]
+
+# generate_test_qr.py — creates a QR code you control, for learning only
+import qrcode
+
+# Use a domain/page YOU own, or plain text — never someone else's brand or a real login flow
+data = "https://example.com/your-own-test-page"
+
+img = qrcode.make(data)
+img.save("test_qr.png")
+print("Saved test_qr.png — scan it with your phone to see how the OS previews the URL")</pre></div>
+<div class="codebox"><pre>pip install opencv-python
+
+# decode_qr.py — inspect a QR code's contents BEFORE opening it anywhere
+import cv2
+
+detector = cv2.QRCodeDetector()
+img = cv2.imread("test_qr.png")
+data, points, _ = detector.detectAndDecode(img)
+print("Decoded content:", data)</pre></div>
+<h4>What this teaches:</h4>
+<ul>
+<li>How your phone previews a URL before opening it — compare it against the actual decoded string.</li>
+<li>How easy it is to generate a QR code pointing anywhere — which is why the destination, not the code itself, is what matters.</li>
+<li>How to build a habit of decoding-before-opening using a local tool, exactly as recommended in Section 4.</li>
+</ul>
+
+<h3>7.3. What a Learner Should Study Next (Without Attacking Anyone)</h3>
+<ul>
+<li>How session-binding and short-lived tokens are implemented in real "scan to log in" protocols (read the public documentation of the authentication standard involved, e.g. how device-linking flows are designed to resist replay).</li>
+<li>How phishing-simulation platforms used by authorized red teams generate reporting and awareness metrics — the professional interest is in metrics and training outcomes, not in building new credential-harvesting pages.</li>
+<li>OWASP's write-ups on authentication and session-management best practices, and how they apply to QR-initiated logins.</li>
+<li>Bug bounty programs: if a company's QR-based login or payment flow has a real weakness, report it through the organization's official bug bounty or responsible-disclosure channel rather than testing it unprompted.</li>
+</ul>
+<div class="note">I can't provide working phishing-page code, credential-harvesting templates, or session-hijacking exploitation scripts, even in an educational context — that applies regardless of who's asking or why. What's above is the legitimate, hands-on side of this field: generating/decoding your own codes, and understanding assessment methodology and defensive design.</div>
+</section>
+
+<section id="s8">
+<h2>8. How Organizations Can Defend Against QR Code Attacks</h2>
+<h4>Recommended measures include:</h4>
+<ul>
+<li><b>Use recognizable official domains:</b> keep login and payment links consistent and easy to verify.</li>
+<li><b>Inspect QR links in email security systems:</b> treat links embedded in QR images as potential destinations requiring analysis.</li>
+<li><b>Strengthen QR-based authentication:</b> short-lived, session-bound tokens and clear confirmation screens identifying the device/session being linked.</li>
+<li><b>Require explicit authorization:</b> don't link an account to a new session solely because a code was scanned.</li>
+<li><b>Monitor suspicious login activity:</b> detect unusual authentication attempts and make session revocation easy.</li>
+<li><b>Train employees:</b> recognizing suspicious QR codes, fraudulent payment stickers, and social-engineering attempts.</li>
+<li><b>Establish an incident-response procedure:</b> how to report suspicious codes, investigate, and secure affected accounts.</li>
+</ul>
+</section>
+
+<section id="concl">
+<h2>Conclusion</h2>
+<p>QR code hacking is not a single attack technique — it's a broad category of threats that exploit the convenience of QR codes and the trust users place in familiar-looking services. An attack may involve phishing, payment-destination manipulation, unauthorized login-session linking, malicious downloads, or software exploitation.</p>
+<div class="note">Scanning a QR code does not automatically compromise a device, but blindly trusting its destination can expose a user to serious risk.</div>
+<p>By verifying links, maintaining updated devices, securing accounts, and understanding authentication mechanisms, individuals and organizations can significantly reduce their exposure to QR code attacks.</p>
+</section>
+
+<section id="refs">
+<h2>References and Further Reading</h2>
+<ol>
+<li>Federal Bureau of Investigation (FBI) — "Official warning about QR code tampering and financial fraud": <a href="https://www.ic3.gov/PSA/2022/PSA220118" target="_blank" rel="noopener">ic3.gov/PSA/2022/PSA220118</a></li>
+<li>OWASP — "QRLJacking attack overview": <a href="https://community.owasp.org/attacks/Qrljacking" target="_blank" rel="noopener">community.owasp.org/attacks/Qrljacking</a></li>
+<li>FBI — "QR codes in unsolicited packages used to initiate fraud schemes": <a href="https://www.fbi.gov/investigate/cyber/alerts/2025/unsolicited-packages-containing-qr-codes-used-to-initiate-fraud-schemes" target="_blank" rel="noopener">fbi.gov/…/unsolicited-packages-containing-qr-codes</a></li>
+</ol>
+</section>
+
+<section class="foot-cta">
+<div>📲 Follow on Instagram</div>
+<div style="margin-top:6px;"><b>@mohamed.amine_basem</b></div>
+<a href="https://www.instagram.com/mohamed.amine_basem/" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:6px;">instagram.com/mohamed.amine_basem</a>
+</section>
+<footer>Learn deliberately · Browse securely</footer>
+</div>
+</body>
+</html>
